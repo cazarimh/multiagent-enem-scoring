@@ -1,0 +1,176 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, tmargin=3cm, lmargin=2.5cm, rmargin=2.5cm, bmargin=3cm]{geometry}
+\usepackage{hyperref}
+
+\usepackage[brazilian]{babel} % Remover linha em caso de escrita em inglês
+\usepackage[alf]{abntex2cite}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\pagestyle{fancy} % Ativar o estilo fancy
+\fancyhf{} % Limpar cabeçalhos e rodapés
+\renewcommand{\headrulewidth}{0pt} % Remover a linha do cabeçalho
+\fancyfoot[C]{IC/UNICAMP \\ 2026 }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CONFIGURAÇÃO DA PRIMEIRA PÁGINA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+\vspace{5mm}
+\hrule
+
+\vspace{3mm}
+
+\begin{center}
+    {\large\textbf{INSTITUTO DE COMPUTAÇÃO - UNICAMP}} \\
+    \vspace{3mm}
+    {\large\textbf{MO810A/MC959A - Sistemas Multiagentes com Modelos de Linguagem}} \\
+    \vspace{3mm}
+    {\large\textbf{Prof. Dr. Julio Cesar dos Reis}}
+\end{center}
+
+\vspace{3mm}
+\hrule
+
+\vspace{2.5cm}
+\begin{flushright}
+    \Large{\textbf{Fase 1 - Proposta}} \\
+    \vspace{1cm}
+    \textit{
+        Correção de redações do ENEM com agentes especialistas \\
+    }
+    \vspace{5cm}
+    Artur Dias de Oliveira - 252635 \\
+    Henrique Cazarim Meirelles Alves - 244763
+\end{flushright}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newpage
+\pagestyle{fancy} % 2. Ativar o estilo fancy
+\fancyhf{} % 3. Limpar cabeçalhos e rodapés
+\renewcommand{\headrulewidth}{0pt} % Remover a linha do cabeçalho
+
+\fancyfoot[R]{\thepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%       INÍCIO DAS SEÇÕES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Cenário e Contexto}
+\label{sec:contexto}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+O objetivo principal do projeto é desenvolver um sistema multiagentes especializado em gerar avaliações e \textit{feedbacks} sobre redações do ENEM (Exame Nacional do Ensino Médio) de maneira precisa, embasada e didática. Este projeto se insere na área de Inteligência Artificial aplicada à Educação com o objetivo de suprir a necessidade pelo treinamento da escrita por parte dos vestibulandos, sem a necessidade de um corretor humano.
+
+O problema central reside na escassez de um acompanhamento pedagógico contínuo e próximo, cenário que impossibilita a realização de correções textuais frequentes e críticas, fundamentais para o desenvolvimento da competência da escrita argumentativa do aluno. Essa limitação é revelada quando analisamos a sobrecarga de trabalho dos professores no ensino médio brasileiro: dados do \citeonline{inepEsforco2025} revelam que cerca de 56,4\% dos professores do ensino médio atendem de 50 a mais de 400 alunos em diversos turnos e escolas, enquanto 42,2\% atendem entre 25 e 300 alunos em diversos turnos em uma única escola.
+
+O ambiente em que o problema se manifesta é principalmente no sistema educacional brasileiro, especificamente na preparação para o exame. Este ecossistema envolve instituições de ensino, professores, plataformas digitais de educação e, no centro do processo, os estudantes.
+
+O público-alvo direto é composto majoritariamente por estudantes do ensino médio, mas se estende a qualquer indivíduo que tenha interesse em treinar e aprimorar a escrita no modelo dissertativo-argumentativo exigido pelo exame, que representa a principal via de acesso ao ensino superior no Brasil, contando com mais de 850 mil ingressantes dentre os programas Sisu, Prouni e Fies \cite{sisu2024, inepCenso2024}.
+
+Atualmente, observa-se uma crescente adoção de tecnologias de Processamento de Linguagem Natural e Grandes Modelos de Linguagem em ferramentas educacionais. A ferramenta conhecida como Avaliação Automática de Redações \textit{(Automated Essay Scoring - AES)} tem migrado de abordagens convencionais baseadas na extração de características sintáticas para o uso de inteligência artificial generativa \cite{aesSoTA}.
+
+No entanto, essas tecnologias esbarram em desafios significativos quando aplicadas a contextos educacionais rigorosos. Os principais desafios registrados na área incluem:
+
+\begin{itemize}
+    \item Escalabilidade: Há uma busca muito grande pela prática contínua de escrita pelos alunos, ao mesmo tempo que a disponibilidade de corretores humanos para fornecer retornos detalhados e em tempo hábil é limitada. Esse gargalo é mais evidente, sobretudo, na rede pública de ensino, gerando atrasos ou ausência de \textit{feedbacks} \cite{enemIA}.
+    \item Superficialidade de sistemas genéricos: O uso direto de IAs generativas convencionais via \textit{prompting} simples tende a gerar avaliações holísticas e generalistas, que não se relacionam diretamente com as cinco competências padronizadas pelo INEP e analisadas no exame \cite{agenticEdu}.
+    \item Explicabilidade e \textit{feedback} informativo: O desafio, do ponto de vista de interfaces humano-computador, é, para além de gerar uma nota precisa, justificar essa nota de forma transparente, didática e construtiva, para que o estudante compreenda exatamente onde errou e como pode melhorar em seu próximo texto \cite{agenticEdu}.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Motivação para o Tema}
+\label{sec:motivacao}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+No contexto de relevância social, a pesquisa se relaciona diretamente com os Objetivos de Desenvolvimento Sustentável (ODS) da ONU. Destes, podemos destacar o ODS 4 (Educação de Qualidade), que visa "assegurar a educação inclusiva e equitativa e de qualidade, e promover oportunidades de aprendizagem ao longo da vida para todas e todos" e, pelas metas detalhadas, "assegurar a igualdade de acesso para todos os homens e mulheres à educação técnica, profissional e superior de qualidade" e "aumentar substancialmente o número de jovens e adultos que tenham habilidades relevantes, inclusive competências técnicas e profissionais" \cite{odsONU}.
+
+A atual pesquisa contribui nesse sentido ao promover e auxiliar no acesso a um ensino superior de qualidade, visto que o ENEM é o principal exame de admissão para universidades brasileiras. Além disso, o treinamento da redação dissertativo-argumentativa incita o pensamento crítico e a capacidade de propor e argumentar soluções pertinentes à sociedade.
+
+Além da ODS 4, o projeto se relaciona com a ODS 10 (Redução das Desigualdades), que busca "reduzir a desigualdade dentro dos países e entre eles" por meio das seguintes metas: “empoderar e promover a inclusão social, econômica e política de todos, independentemente da idade, gênero, deficiência, raça, etnia, origem, religião, condição econômica ou outra” e “garantir a igualdade de oportunidades e reduzir as desigualdades de resultados” \cite{odsONU}.
+
+A ferramenta resultante desta pesquisa atua como um agente mitigador da ineficiência da rede pública de ensino, que cria uma grande disparidade entre os estudantes de escolas públicas e privadas, oferecendo um serviço preparatório de alto nível de maneira acessível.
+
+A implementação de um sistema multiagentes para a correção da redação representa um avanço tecnológico significativo, substituindo abordagens convencionais monolíticas de Inteligência Artificial por uma arquitetura modular e descentralizada. O que antes era sobrecarregado num único agente se distribui em vários, simulando uma banca de correção, onde cada um foca em sua competência e os resultados são consolidados ao final.
+
+Essa abordagem traz avanços no conceito de Explicabilidade de IA, pois a divisão em competências traz justificativas pedagógicas plausíveis sobre cada nota, atenuando o efeito conhecido como "caixa-preta", no qual o usuário somente vê o resultado, mas não vê a lógica por trás dele. Além disso, essa estrutura proporciona uma alta escalabilidade e eficiência, pois cada especialista pode ser atualizado de forma independente conforme as diretrizes do INEP ou melhorado sem afetar os outros, o que seria difícil em uma arquitetura monolítica.
+
+O principal grupo beneficiado é composto por estudantes de ensino médio, que terão acesso a correções rápidas, precisas e detalhadas a qualquer momento. Essa solução promove a democratização do ensino, visto que \textit{feedbacks} qualificados costumam ficar restritos a plataformas pagas e inacessíveis para a maioria dos alunos. Atualmente, o MEC possui uma ferramenta gratuita de correção por IA, porém seu propósito é simular o ambiente do exame, impondo limite de tempo e restringindo-se aos temas de redações de anos anteriores. O foco dessa pesquisa é entregar uma correção técnica detalhada e embasada, priorizando a prática contínua do aluno sem a dependência de propostas fixas ou limites de tempo.
+
+Indiretamente, educadores e instituições de ensino também serão beneficiados, já que a inteligência do sistema otimiza o suporte pedagógico e alivia a sobrecarga de trabalho docente, embora o sistema não substitua o suporte de um professor real.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Caracterização do Problema}
+\label{sec:problema}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+O problema central a ser investigado divide-se em dois principais pontos. O primeiro ponto reside no gargalo logístico de avaliações feitas por humanos, já o segundo representa uma limitação técnica da maioria das abordagens atuais com Inteligência Artificial. Embora já existam ferramentas, inclusive iniciativas governamentais, focadas na automação da correção de redações, o desafio científico que permanece em aberto é a dificuldade de modelar um sistema aberto capaz de tomar decisões justificadas e que estas sejam auditáveis. Ademais, outro desafio é fazer com que este sistema priorize a evolução pedagógica contínua do aluno.
+
+A visualização dessas duas lacunas é feita através de dois cenários. No cenário educacional, dados do \citeonline{inepEsforco2025} atestam que a alta proporção de alunos por docente no ensino médio torna insustentável a correção manual e recorrente de redações. Essa falha estrutural compromete o acompanhamento próximo da evolução de cada aluno, especialmente na rede pública, e perpetua um cenário de desigualdade, no qual as melhores notas são alcançadas marjoritariamente por estudantes com melhores condições socioeconômicas. Já no aspecto tecnológico, a observação das ferramentas atuais de \textit{(Automated Essay Scoring - AES)} dá indícios de que implementações com o uso de \textit{LLMs} operam por meio de arquiteturas monolíticas. Ao processar a tarefa em um único fluxo de contexto, esses modelos geram análises generalistas do texto e falham em isolar e avaliar os critérios de forma independente, como distinguir o domínio gramatical da estruturação argumentativa.
+
+As consequências práticas da ausência de uma solução adequada são a perpetuação de desigualdades de preparo entre candidatos de origens socioeconômicas diferentes e a sobrecarga contínua de professores, que não conseguem suprir a demanda com qualidade e sustentabilidade. Do ponto de vista científico e tecnológico, a utilização de IAs genéricas para correção esbarra no problema da falta de explicabilidade. Isto desvia o valor formativo da ferramenta, visto que o aluno não recebe a devida justificativa da nota recebida para poder evoluir.
+
+Portanto, o escopo deste projeto abordará a estruturação e validação da avaliação técnica de redações no modelo dissertativo-argumentativo, com foco na geração de notas divididas nas cinco competências do ENEM e na produção de justificativas pedagógicas transparentes e embasadas, de maneira acessível. Simular o ambiente de prova, definição de temas e prazos fixos, ou mesmo qualquer tentativa de substituir o papel pedagógico de um professor não estão na proposta.
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Proposta de Solução Conceitual}
+\label{sec:solucao}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+A solução conceitual proposta substitui arquiteturas convencionais monolíticas e generalistas, nas quais um único modelo recebe a redação, faz a correção e devolve o \textit{feedback}, por um sistema multiagentes que simula uma banca especializada. Neste modelo, o processo de avaliação é decomposto em especialistas, com contexto e responsabilidades independentes, que processam cada competência, e o resultado final é construído de forma modular, consolidando o que foi gerado por cada agente de uma forma amigável e transparente.
+
+O sistema é composto por um agente orquestrador, responsável pela coordenação do processo avaliativo, e por cinco agentes especialistas, cada um dedicado a uma das cinco competências avaliadas: (i) domínio da norma culta da língua portuguesa; (ii) compreensão do tema e aplicação das áreas de conhecimento; (iii) seleção, organização e interpretação de informações em defesa de um ponto de vista; (iv) conhecimento dos mecanismos linguísticos de construção da argumentação; e (v) elaboração de proposta de intervenção respeitando os direitos humanos \cite{matrizReferencia}.
+
+Cada agente recebe a redação e um contexto próprio, proveniente da sua competência em específico, e produz, de maneira modular, uma avaliação acompanhada de sua justificativa didática. Essa especialização permite que cada avaliação se relacione diretamente com os critérios oficiais do exame, evitando avaliações generalistas que não se relacionam com estes critérios. A especialização e a justificativa que cada agente cria são o pilar do sistema: o estudante recebe detalhes específicos de cada competência, para que saiba exatamente em quais delas ele errou e como pode melhorar.
+
+O agente orquestrador cumpre três funções centrais: distribui a redação aos especialistas; concilia as avaliações, identificando inconsistências entre as notas e propondo eventuais revisões; e consolida os resultados locais em um resultado final consistente, coerente e educativo. A arquitetura ainda prevê que um agente revisor possa atuar de maneira crítica, questionando decisões e justificativas, com o objetivo de reduzir alucinações e garantir que cada crítica se baseie em trechos concretos da redação original.
+
+Do ponto de vista técnico, a abordagem exige técnicas de engenharia de \textit{prompts}, definição de responsabilidades e restrições por agente, e orquestração de diálogos entre agentes. Essa divisão proporciona modularidade e escalabilidade, cada agente pode ser aprimorado ou recalibrado de forma independente e novos agentes podem ser adicionados sem afetar os demais componentes que estão cumprindo seu papel de maneira efetiva.
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Posicionamento em Relação ao Estado da Arte}
+\label{sec:estado_da_arte}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+O campo de \textit{Automatic Essay Scoring} evoluiu significativamente, transitando de sistemas baseados na extração de características linguísticas superficiais para arquiteturas avançadas fundamentadas em \textit{Large Language Models}. Essa transição se explica pela grande capacidade de \textit{LLMs} interpretarem instruções complexas em linguagem natural sem nenhum tipo de treinamento ou fornecimento de dado específico \textit{(zero-shot)} e, além disso, gerarem resposta em linguagem natural explicando suas decisões \cite{aesSoTA}.
+
+Ainda assim, o estado da arte atual demonstra que a escala do modelo não representa um fator determinante para o sucesso em tarefas de avaliação, evidenciando que a engenharia de instruções desempenha um papel crítico. Estratégias alinhadas a rubricas, que detalham definições legíveis por humanos para cada dimensão de correção, permitem que modelos de código aberto de menor porte alcancem correspondência satisfatória com avaliadores humanos, mesmo sem \textit{fine-tuning} \cite{openSourceSLM}. Para o escopo deste projeto, esse método exige a adaptação direta das rubricas descritas pelos autores para as competências da Matriz de Referência do INEP.
+
+Ademais, pesquisas recentes ressaltam as limitações do uso de um único modelo (arquitetura monolítica) em favor da adoção de sistemas colaborativos e multiagentes. Arquiteturas em camadas que utilizam múltiplos modelos atuando na geração de avaliações iniciais e na síntese das respostas, superam de forma consistente as soluções individuais. Além disso, a divisão da avaliação em subtarefas especializadas reduz falhas frequentes em inteligências artificiais aplicadas à educação, como a inconsistência, a alucinação e as avaliações excessivamente positivas \cite{agenticEdu}. A adaptação desta solução consiste em transformar a avaliação da redação do ENEM em subtarefas especializadas, como a separação em cinco especialistas operando de forma autônoma, enquanto o orquestrador sintetiza as notas e justificativas em um texto formativo final.
+
+As melhores abordagens conectam os agentes a diretrizes oficiais e combinam métricas de texto por meio de ferramentas para gerar avaliações mais precisas e alinhadas aos objetivos pedagógicos \cite{tools}. Essa técnica pode ser adaptada mediante o fornecimento de ferramentas específicas aos agentes, permitindo que fundamentem suas análises em recursos externos e dinâmicos, baseando-se, assim, em mais do que apenas seus dados de treinamento prévio para avaliar sua competência designada.
+
+Este projeto emprega os aspectos citados acima para se posicionar na fronteira do estado da arte no âmbito de sistemas multiagentes com foco em correção automática de redações. Ao adotar princípios de fluxos de trabalho agênticos e a integração de instruções estritamente alinhadas a rubricas, o sistema visa alcançar um desempenho em nível de especialista humano. Por fim, ao focar na explicabilidade e na geração de análises fundamentadas em diretrizes educacionais concretas, a proposta atende aos princípios socioeducacionais de uma IA escalável, auditável e pedagogicamente valiosa.
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Declaração de uso de IA generativa no processo de elaboração}
+\label{sec:declaracao_uso_ia}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Durante a preparação deste trabalho, os autores utilizaram o Google Gemini para aprimorar a clareza do texto, facilitar a busca de artigos e fontes, e auxiliar no uso da sintaxe LaTeX. Após o uso desta ferramenta/serviço, os autores revisaram e editaram o conteúdo conforme necessário e assumem total responsabilidade pelo conteúdo do trabalho submetido.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%          BIBLIOGRAFIA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliography{ref}
+\end{document}

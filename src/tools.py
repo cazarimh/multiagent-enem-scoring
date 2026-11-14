@@ -3,10 +3,16 @@ import re
 import unicodedata
 from typing import Optional, TypedDict
 
+import spacy
 from langchain_core.tools import tool
 from language_tool_python import LanguageTool
 
 language_tool = LanguageTool("pt-BR")
+nlp = spacy.load("pt_core_news_sm")
+
+def _morph(token: spacy.tokens.Token, key: str) -> Optional[str]:
+  values = token.morph.get(key)
+  return values[0] if values else None
 
 # Competência 1
 
@@ -35,6 +41,102 @@ def check_text_spelling(text: str) -> list[SpellingMatch]:
     }
     for match in matches
   ]
+
+class AgreementIssue(TypedDict):
+  kind: str
+  snippet: str
+  message: str
+
+def _span_text(doc: spacy.tokens.Doc, *tokens: spacy.tokens.Token) -> str:
+  start = min(token.i for token in tokens)
+  end = max(token.i for token in tokens)
+  return doc[start:end + 1].text
+
+@tool
+def analyze_agreement(text: str) -> list[AgreementIssue]:
+  """Detecta possíveis erros de concordância verbal e nominal (Competência I)."""
+  doc = nlp(text)
+  issues: dict[tuple[str, str], AgreementIssue] = {}
+
+  for token in doc:
+    subjects = [child for child in token.children if child.dep_ in ("nsubj", "nsubj:pass")]
+    if not subjects:
+      continue
+
+    if token.pos_ == "VERB" and "Fin" in token.morph.get("VerbForm"):
+      verb = token
+    else:
+      copulas = [
+        child for child in token.children
+        if child.dep_ == "cop" and "Fin" in child.morph.get("VerbForm")
+      ]
+      verb = copulas[0] if copulas else None
+
+    if verb is None:
+      continue
+
+    for subject in subjects:
+      subject_number, verb_number = _morph(subject, "Number"), _morph(verb, "Number")
+      disagreement = (
+        subject_number and verb_number and subject_number != verb_number
+      ) or (
+        subject.pos_ == "PRON"
+        and _morph(subject, "Person") and _morph(verb, "Person")
+        and _morph(subject, "Person") != _morph(verb, "Person")
+      )
+      if disagreement:
+        snippet = _span_text(doc, subject, verb)
+        issues.setdefault(("verbal", snippet), {
+          "kind": "verbal",
+          "snippet": snippet,
+          "message": (
+            f"O sujeito '{subject.text}' e o verbo '{verb.text}' "
+            f"não concordam em número/pessoa."
+          )
+        })
+
+  for token in doc:
+    if token.pos_ != "NOUN":
+      continue
+    noun_gender, noun_number = _morph(token, "Gender"), _morph(token, "Number")
+    for child in token.children:
+      if child.dep_ not in ("amod", "det"):
+        continue
+      gender, number = _morph(child, "Gender"), _morph(child, "Number")
+      if (gender and noun_gender and gender != noun_gender) or (
+        number and noun_number and number != noun_number
+      ):
+        snippet = _span_text(doc, token, child)
+        issues.setdefault(("nominal", snippet), {
+          "kind": "nominal",
+          "snippet": snippet,
+          "message": (
+            f"'{child.text}' e '{token.text}' não concordam em gênero/número."
+          )
+        })
+
+  return list(issues.values())
+
+class CapitalizationIssue(TypedDict):
+  snippet: str
+  message: str
+
+@tool
+def analyze_capitalization(text: str) -> list[CapitalizationIssue]:
+  """Detecta frases que iniciam com letra minúscula (Competência I)."""
+  doc = nlp(text)
+  issues: list[CapitalizationIssue] = []
+
+  for sent in doc.sents:
+    first = next((token for token in sent if token.is_alpha), None)
+    if first is None or not first.text[0].islower():
+      continue
+    issues.append({
+      "snippet": sent.text.strip()[:60],
+      "message": f"A frase inicia com letra minúscula: '{first.text}'."
+    })
+
+  return issues
 
 # Competência 2
 
